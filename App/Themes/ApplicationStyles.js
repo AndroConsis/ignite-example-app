@@ -44,6 +44,12 @@ const ApplicationStyles = {
       ...Fonts.style.h2,
       fontSize: 14,
       color: Colors.text
+    },
+    thumb: {
+      height: Metrics.images.medium,
+      width: Metrics.images.medium,
+      borderRadius: Metrics.images.medium/2,
+      margin: Metrics.baseMargin
     }
   },
   darkLabelContainer: {

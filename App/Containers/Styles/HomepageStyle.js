@@ -9,29 +9,28 @@ export default StyleSheet.create({
   },
   row: {
     flex: 1,
-    backgroundColor: Colors.fire,
-    marginVertical: Metrics.smallMargin,
-    justifyContent: 'center',
-    padding: Metrics.baseMargin
+    marginVertical: Metrics.baseMargin,
+    marginRight: Metrics.baseMargin,
+    justifyContent: "flex-start",
   },
   boldLabel: {
     fontWeight: 'bold',
-    alignSelf: 'center',
-    color: Colors.snow,
-    textAlign: 'center',
+    color: Colors.panther,
     marginBottom: Metrics.smallMargin
   },
   label: {
-    textAlign: 'center',
-    color: Colors.snow
+    color: Colors.panther
   },
   listContent: {
     marginTop: Metrics.baseMargin
   },
   column: {
-    flex: 3,
-    flexDirection: "column",
-    marginVertical: Metrics.smallMargin,
-    padding: Metrics.baseMargin
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: Colors.snow,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: Metrics.baseMargin,
+    borderRadius: Metrics.buttonRadius
   }
 })

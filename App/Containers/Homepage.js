@@ -2,6 +2,8 @@ import React from 'react'
 import { View, Text, FlatList, Image } from 'react-native'
 import { connect } from 'react-redux'
 import HomepageActions from '../Redux/HomepageRedux';
+import { Images } from '../Themes'
+import Divider from '../Components/Divider';
 
 // More info here: https://facebook.github.io/react-native/docs/flatlist.html
 
@@ -40,10 +42,8 @@ class Homepage extends React.PureComponent {
   *************************************************************/
   renderRow ({item}) {
     return (
-      <View>
-        <View style={styles.column}>
-      <Image source= {{uri: item.restaurant.thumb}}/>
-        </View>
+      <View style={styles.column}>
+      <Image style={styles.thumb} source= {{uri: item.restaurant.thumb}}/>
       <View style={styles.row}>
         <Text style={styles.boldLabel}>{item.restaurant.name}</Text>
         <Text style={styles.label}>{item.restaurant.cuisines}</Text>
@@ -69,8 +69,7 @@ class Homepage extends React.PureComponent {
   renderEmpty = () =>
     <Text style={styles.label}> - Nothing to See Here - </Text>
 
-  renderSeparator = () =>
-    <Text style={styles.label}>------</Text>
+  renderSeparator = () => <Divider />
 
   // The default function if no Key is provided is index
   // an identifiable key is important if you plan on
@@ -97,6 +96,7 @@ class Homepage extends React.PureComponent {
   render () {
     return (
       <View style={styles.container}>
+      <Image source={Images.background} style={styles.backgroundImage} resizeMode='stretch' />
         <FlatList
           contentContainerStyle={styles.listContent}
           data={this.state.dataObjects}
