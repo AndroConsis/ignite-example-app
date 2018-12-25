@@ -3,6 +3,8 @@
 
 * Standard compliant React Native App Utilizing [Ignite](https://github.com/infinitered/ignite)
 
+![image](https://github.com/AndroConsis/ignite-example-app/blob/development/igniteExample1.gif?raw=true)
+
 ## :arrow_up: How to Setup
 
 **Step 1:** git clone this repo:
