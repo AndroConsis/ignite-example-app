@@ -20,5 +20,12 @@ export default {
       ok: true,
       data: username.toLowerCase() === 'gantman' ? gantmanData : skellockData
     }
+  },
+  getHomepage: (lat, lon) => {
+    const searchResult = require('../Fixtures/zomatosearch.json')
+    return {
+      ok: true,
+      data: searchResult
+    }
   }
 }
