@@ -1,14 +1,51 @@
 import React from 'react'
-import { View, Text, FlatList, Image } from 'react-native'
+import { View, Text, FlatList, Image, Platform, Dimensions, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import HomepageActions from '../Redux/HomepageRedux';
-import { Images } from '../Themes'
+import { Images, Colors } from '../Themes'
 import Divider from '../Components/Divider';
+import Header from '../Components/Header';
 
 // More info here: https://facebook.github.io/react-native/docs/flatlist.html
 
 // Styles
 import styles from './Styles/HomepageStyle'
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+
+const IS_IPHONE_X = SCREEN_HEIGHT === 825 || SCREEN_HEIGHT === 896;
+const STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? (IS_IPHONE_X ? 44 : 20) : 0;
+const HEADER_HEIGHT = 88;
+const NAV_BAR_HEIGHT = HEADER_HEIGHT - STATUS_BAR_HEIGHT;
+
+const headerStyles = StyleSheet.create({
+  navContainer: {
+    height: HEADER_HEIGHT,
+    marginHorizontal: 10,
+  },
+  statusBar: {
+    height: STATUS_BAR_HEIGHT,
+    backgroundColor: Colors.transparent,
+  },
+  navBar: {
+    height: NAV_BAR_HEIGHT,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: Colors.transparent,
+  },
+  innerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
+  },
+  titleStyle: {
+    color: Colors.snow,
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+});
 
 class Homepage extends React.PureComponent {
   /* ***********************************************************
@@ -28,9 +65,16 @@ class Homepage extends React.PureComponent {
     if (nextProps.payload != null) {
       this.setState({
         dataObjects: nextProps.payload.restaurants
-      }) 
+      })
     }
   }
+
+  renderNavBar = () => (
+    <View style={headerStyles.navContainer}>
+      <View style={headerStyles.statusBar} />
+      <View style={headerStyles.navBar} />
+    </View>
+  )
 
   /* ***********************************************************
   * STEP 2
@@ -40,14 +84,14 @@ class Homepage extends React.PureComponent {
   * e.g.
     return <MyCustomCell title={item.title} description={item.description} />
   *************************************************************/
-  renderRow ({item}) {
+  renderRow({ item }) {
     return (
       <View style={styles.column}>
-      <Image style={styles.thumb} source= {{uri: item.restaurant.thumb}}/>
-      <View style={styles.row}>
-        <Text style={styles.boldLabel}>{item.restaurant.name}</Text>
-        <Text style={styles.label}>{item.restaurant.cuisines}</Text>
-      </View>
+        <Image style={styles.thumb} source={{ uri: item.restaurant.thumb }} />
+        <View style={styles.row}>
+          <Text style={styles.boldLabel}>{item.restaurant.name}</Text>
+          <Text style={styles.label}>{item.restaurant.cuisines}</Text>
+        </View>
       </View>
     )
   }
@@ -57,13 +101,6 @@ class Homepage extends React.PureComponent {
   * Consider the configurations we've set below.  Customize them
   * to your liking!  Each with some friendly advice.
   *************************************************************/
-  // Render a header?
-  renderHeader = () =>
-    <Text style={[styles.label, styles.sectionHeader]}> - Header - </Text>
-
-  // Render a footer?
-  renderFooter = () =>
-    <Text style={[styles.label, styles.sectionHeader]}> - Footer - </Text>
 
   // Show this when data is empty
   renderEmpty = () =>
@@ -93,20 +130,33 @@ class Homepage extends React.PureComponent {
   //   {length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index}
   // )}
 
-  render () {
+  renderContent = () => (<View style={{ flex: 1 }}>
+    <FlatList
+      contentContainerStyle={styles.listContent}
+      data={this.state.dataObjects}
+      renderItem={this.renderRow}
+      keyExtractor={this.keyExtractor}
+      initialNumToRender={this.oneScreensWorth}
+      ListEmptyComponent={this.renderEmpty}
+      ItemSeparatorComponent={this.renderSeparator}
+    /></View>)
+
+
+  render() {
     return (
       <View style={styles.container}>
-      <Image source={Images.background} style={styles.backgroundImage} resizeMode='stretch' />
-        <FlatList
-          contentContainerStyle={styles.listContent}
-          data={this.state.dataObjects}
-          renderItem={this.renderRow}
-          keyExtractor={this.keyExtractor}
-          initialNumToRender={this.oneScreensWorth}
-          ListHeaderComponent={this.renderHeader}
-          ListFooterComponent={this.renderFooter}
-          ListEmptyComponent={this.renderEmpty}
-          ItemSeparatorComponent={this.renderSeparator}
+        <Header
+          headerMinHeight={HEADER_HEIGHT}
+          headerMaxHeight={250}
+          extraScrollHeight={20}
+          navbarColor={Colors.primary}
+          title="Around You"
+          titleStyle={headerStyles.titleStyle}
+          backgroundColor={Colors.background}
+          renderNavBar={this.renderNavBar}
+          renderContent={this.renderContent}
+          contentContainerStyle={{ flexGrow: 1, backgroundColor: Colors.background }}
+          containerStyle={{ flex: 1, backgroundColor: Colors.background }}
         />
       </View>
     )
@@ -114,7 +164,7 @@ class Homepage extends React.PureComponent {
 }
 
 const mapStateToProps = (state) => {
-  return { 
+  return {
     payload: state.homepage.payload
   }
 }
